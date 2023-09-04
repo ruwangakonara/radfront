@@ -1,127 +1,144 @@
-import { useEffect, useState } from "react"
-import axios from "axios"
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-export default function Announcements(){
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:9007',
+    withCredentials: true, 
+});
 
-    const [announcements, setAnnouncements] = useState(null)
-    const [editingAnnouncementId, setEditingAnnouncementId] = useState(null)
-    const [editedTitle, setEditedTitle] = useState("")
-    const [editedBody, setEditedBody] = useState("")
-    const [newAnnTitle, setNewAnnTitle] = useState("")
-    const [newAnnBody, setNewAnnBody] = useState("")
+export default function Announcements() {
+  const [announcements, setAnnouncements] = useState(null);
+  const [editingAnnouncementId, setEditingAnnouncementId] = useState(null);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedBody, setEditedBody] = useState('');
+  const [newAnnTitle, setNewAnnTitle] = useState('');
+  const [newAnnBody, setNewAnnBody] = useState('');
 
-    useEffect(() => {
-        fetchannouncements()
-    }, [])
-    
-    const handleDelete = async (announcementid) => {
-        await axios.delete(`http://localhost:9007/announcements/${announcementid}`)
-        fetchannouncements()
-    }
+  useEffect(() => {
+      fetchAnnouncements();
+  }, []);
 
-    const handleCreate = async() => {
-        try{
+  const navigate = useNavigate()
 
-            await axios.post(`http://localhost:9007/announcements`, {
-                title: newAnnTitle,
-                body: newAnnBody
-            });
+  const handleDelete = async (announcementId) => {
+      try {
+          const response = await axiosInstance.delete(`/announcements/${announcementId}`);
+          if(response.status === 200){
+            fetchAnnouncements();
+          } else if(response.status === 203){
+            navigate('/signin')
+          }
+      } catch (err) {
+          console.log(err);
+      }
+  };
 
-            setNewAnnTitle("")
-            setNewAnnBody("")
+  const handleCreate = async () => {
+      try {
+          const response = await axiosInstance.post('/announcements', {
+              title: newAnnTitle,
+              body: newAnnBody,
+          });
 
-            fetchannouncements();
-        }catch(err){
+          if(response.status === 200){
+            setNewAnnTitle('');
+            setNewAnnBody('');
+  
+            fetchAnnouncements();
+          } else if(response.status === 203){
+            navigate('/signin')
+          }
 
-            console.log(err)
+      } catch (err) {
+          console.log(err);
+      }
+  };
 
-        }
-    }
+  const fetchAnnouncements = async () => {
+      try {
+          const response = await axiosInstance.get('/announcements');
+          setAnnouncements(response.data.announcements);
+      } catch (err) {
+          console.log(err);
+      }
+  };
 
-    const fetchannouncements = async () =>{
+  const handleEdit = (announcement) => {
+      setEditingAnnouncementId(announcement._id);
+      setEditedTitle(announcement.title);
+      setEditedBody(announcement.body);
+  };
 
-        try{
+  const handleUpdate = async (announcementId) => {
+      try {
+          const response = await axiosInstance.put(`/announcements/${announcementId}`, {
+              title: editedTitle,
+              body: editedBody,
+          });
 
-            const response = await axios.get("http://localhost:9007/announcements")
-            setAnnouncements(response.data.notes)
-        } catch(err){
-            console.log(err)
-        }
-
-        // console.log(response)
-    }
-
-    const handleEdit = (announcement) => {
-        setEditingAnnouncementId(announcement._id);
-        setEditedTitle(announcement.title);
-        setEditedBody(announcement.body);
-    };
-
-    const handleUpdate = async (announcementId) => {
-        try{
-
-            await axios.put(`http://localhost:9007/announcements/${announcementId}`, {
-                title: editedTitle,
-                body: editedBody
-            });
+          if(response.status === 200){
+            
             setEditingAnnouncementId(null);
             setEditedTitle('');
             setEditedBody('');
-            fetchannouncements();
-        }catch(err){
 
-            console.log(err)
+            fetchAnnouncements();
+          } else if(response.status === 203){
+            navigate('/signin')
+          }
 
-        }
-       
-    };
+      } catch (err) {
+          console.log(err);
+      }
+  };
 
-    return(
-        <div>
-            <head>
-                <title>Announcements</title>
-                {/* <header>
-                    <a></a>
-                </header> */}
-            </head>
-            <body>
-                <div><h1>Announcements</h1></div>
-                {announcements && announcements.map(announcement => {
-                return (<div>
-                    {/* <h3>Title: {announcement.title}</h3><br></br><br></br>
-                    <h4>Body: {announcement.body}</h4><br></br>
-                    <button onClick={() => handleDelete(announcement._id)}>Delete</button><br></br> */}
-                    <h3>{editingAnnouncementId === announcement._id ? (
-                            <input type="text" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)}/>) : (announcement.title)}</h3><p>Created: {new Date(announcement.createdAt).toLocaleString()}</p><br />
-                    <h4>{editingAnnouncementId === announcement._id ? (<textarea
-                                value={editedBody}
-                                onChange={(e) => setEditedBody(e.target.value)}
-                            />
-                        ) : (
-                            announcement.body
-                        )}
-                    </h4>
-                        <br />
-                        {editingAnnouncementId === announcement._id ? (
-                            <div>
-                                <button onClick={() => handleUpdate(announcement._id)}>Save</button>
-                                <button onClick={() => setEditingAnnouncementId(null)}>Cancel</button>
-                            </div>
-                        ) : (
-                            <div>
-                                <button onClick={() => handleEdit(announcement)}>Edit</button>
-                                <button onClick={() => handleDelete(announcement._id)}>Delete</button>
-                            </div>
-                        )}
-                        <br />
-
-                </div>)
-                })}
-            </body>
-
-      
-        </div>
-        
-    )
-
+  return (
+      <div>
+          <h1>Announcements</h1>
+          <div>
+              <h2>Create Announcement</h2>
+              <div>
+                  <label>Title:</label>
+                  <input
+                      type="text"
+                      value={newAnnTitle}
+                      onChange={(e) => setNewAnnTitle(e.target.value)}
+                  />
+              </div>
+              <div>
+                  <label>Body:</label>
+                  <textarea
+                      value={newAnnBody}
+                      onChange={(e) => setNewAnnBody(e.target.value)}
+                  />
+              </div>
+              <button onClick={handleCreate}>Create</button>
+          </div>
+          {announcements &&
+              announcements.map((announcement) => {
+                  return (
+                      <div key={announcement._id}>
+                          <h3>{editingAnnouncementId === announcement._id ? (<div><label>Title:</label> <input type="text" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)}/> </div>) : (announcement.title)}</h3>
+                          <br />
+                          <h4>{editingAnnouncementId === announcement._id ? (<div><label>Body:</label> <textarea value={editedBody} onChange={(e) => setEditedBody(e.target.value)}/></div>) : (announcement.body)}</h4>
+                          <br />
+                          <p>Posted: {new Date(announcement.createdAt).toLocaleString()}</p>
+                          {editingAnnouncementId === announcement._id ? (
+                              <div>
+                                  <button onClick={() => handleUpdate(announcement._id)}>Save</button>
+                                  <button onClick={() => setEditingAnnouncementId(null)}>Cancel</button>
+                              </div>
+                          ) : (
+                              <div>
+                                  <button onClick={() => handleEdit(announcement)}>Edit</button>
+                                  <button onClick={() => handleDelete(announcement._id)}> Delete</button>
+                              </div>
+                          )}
+                          <br />
+                      </div>
+                  );
+              })}
+      </div>
+  );
 }

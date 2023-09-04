@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreatePost() {
     const [coursename, setCoursename] = useState('');
@@ -11,6 +12,13 @@ export default function CreatePost() {
         setImageFile(event.target.files[0]);
     };
 
+    const navigate = useNavigate();
+
+    const axiosInstance = axios.create({
+        baseURL: 'http://localhost:9007',
+        withCredentials: true,
+    });
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -21,17 +29,18 @@ export default function CreatePost() {
         formData.append('image', imageFile);
 
         try {
-            await axios.post('http://localhost:9007/posts', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-
             
+            const response = await axiosInstance.post('/posts/upload', formData);
 
+            if (response.status === 200) {
+
+                navigate(`/posts/${response.data.postid}`);
+            } else if( response.status === 203){
+                navigate('/signin')
+            }
         } catch (error) {
+            // navigate('/signin')
             console.error('Error creating post:', error.message);
-            
         }
     };
 

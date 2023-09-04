@@ -1,85 +1,63 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Signup from './Signup';
+import { Link } from "react-router-dom";
 
-const serverPort = process.env.REACT_APP_SERVER_PORT;
-
-export default function Posts(){
-
-    const [posts, setPosts] = useState(new Array());
+export default function Posts() {
+    const [posts, setPosts] = useState([]);
     const [selectedPost, setSelectedPost] = useState(null);
+    const [error, setError] = useState("");
 
     const fetchPosts = async () => {
-
-        const response = await axios.get("http://localhost:9007/posts");
-        setPosts(response.data.posts);
+        try {
+            const response = await axios.get("http://localhost:9007/posts");
+            setPosts(response.data.posts);
+        } catch (err) {
+            setError("Unable to Load Posts");
+        }
     };
 
     useEffect(() => {
         fetchPosts();
-    }, []); 
+    }, []);
 
-    const handleDelete = async (postID) => {
-        await axios.delete(`http://localhost:9007/posts/${postID}`)
-        fetchPosts()
-    }
+    // const handleDelete = async (postID) => {
+    //     await axios.delete(`http://localhost:9007/posts/${postID}`);
+    //     fetchPosts();
+    // };
 
-    const handlePostChange = (event) => {
-        setSelectedPost(event.target.files[0]);
-    };
-
-
+    // const handlePostChange = (event) => {
+    //     setSelectedPost(event.target.files[0]);
+    // };
 
     const handleUpload = async () => {
-
-        const formdat = new FormData()
-        formdat.append("image", selectedPost)
-        try{
-            await axios.post("http://localhost:9007/posts/upload", formdat)
+        const formData = new FormData();
+        formData.append("image", selectedPost);
+        try {
+            await axios.post("http://localhost:9007/posts/upload", formData);
             setSelectedPost(null);
             fetchPosts();
-        } catch(err){
-            console.log(err)
+        } catch (err) {
+            console.error(err);
         }
-       
+    };
 
-    }
-
-    return(
+    return (
         <div>
-        {/* <Router>
-            <div className="App">
-                <header className="App-header">
-                    <Switch>
-                        <Route exact path="/" component={Signup} />
-                        <Route path="/login" component={Login} />
-                    </Switch>
-                </header>
-            </div>
-            </Router> */}
             <div>
-                <div>
-                    <input type="file" onChange={handlePostChange} /><br/>
-                    <button onClick={handleUpload}>Upload Image</button>
-                </div>
-                <div>
-                    {posts && posts.map(image => {
-
-                        return (
-                            <div key={image._id} >
-                            <img src={`http://localhost:9007/uploadedimgs/${image.filename}`} alt={image.filename} />
-                            <button onClick={() => handleDelete(image._id)}>Delete</button>
-                        </div>
-
-                        )
-
-                    })}
-                </div>
+                <h1>{error}</h1>
+            </div>
+            <div>
+                {posts && posts.map(post => (
+                    <div key={post._id}>
+                        <h2>Course Name: {post.coursename}</h2>
+                        <h2>Unit Name: {post.unitname}</h2>
+                        <h2>Created At: {new Date(post.createdAt).toLocaleDateString()}</h2>
+                        {/* <button onClick={() => handleDelete(post._id)}>Delete</button> */}
+                        <Link to={`/posts/${post._id}`}><button>View Post</button></Link>
+                    </div>
+                ))}
             </div>
         </div>
-           
-    )
-
+    );
 }

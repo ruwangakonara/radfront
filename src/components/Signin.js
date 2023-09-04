@@ -1,28 +1,35 @@
 import React, { useState } from 'react';
-// import { useB } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-export default function Signin() {
+// Create an Axios instance with the desired configuration
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:9007',
+    withCredentials: true, // This enables sending credentials (cookies) with the request
+});
 
+export default function Signin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
-    const navigate = useNavigate()
-
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:9007/signin', {
+            const response = await axiosInstance.post('/signin', {
                 email,
                 password,
             });
 
-            navigate('/posts'); 
+            if (response.status === 200) {
+                const token = response.data.token;
+                localStorage.setItem('token', token);
 
+                navigate('/posts');
+            }
         } catch (error) {
             setError('Invalid email or password');
         }

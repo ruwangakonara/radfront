@@ -13,7 +13,7 @@ export default function Post({ postId }) {
 
     const fetchPostAndComments = async () => {
         try {
-            const postResponse = await axios.get(`http://localhost:9007/posts/${postId}`);
+            const postResponse = await axios.get(`http://localhost:9007/posts/${postId}`, {withCredentials: true});
             const commentsResponse = await axios.get(`http://localhost:9007/posts/${postId}/comments`);
 
             setPost(postResponse.data);
@@ -73,7 +73,7 @@ export default function Post({ postId }) {
                     <h3>{post.unitname}</h3>
                     <p>{post.description}</p>
                     <p>Created: {new Date(post.createdAt).toLocaleString()}</p>
-                    <img src={`http://localhost:9007/${post.filename}`} alt={post.filename} />
+                    <img src={`http://localhost:9007/uploadedpostimgs/${post.filename}`} alt={post.filename} />
 
                     <div>
                         <button onClick={handleDeletePost}>Delete Post</button>
@@ -93,7 +93,7 @@ export default function Post({ postId }) {
                 <button onClick={handleAddComment}>Add Comment</button>
             </div>
             <h3>Comments</h3>
-            {comments.map(comment => (
+            {comments && comments.map(comment => (
                 <div key={comment._id}>
                     <p>{comment.text}</p>
                     <input

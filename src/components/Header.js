@@ -18,6 +18,17 @@ export default function Header() {
                     <li>
                         <Link to="/ask-support">Create Query</Link>
                     </li>
+                    <li>
+                        <Link to="/queries">Queries</Link>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <Link to="/signin">Sign In</Link>
+                    </li>
+                    <li>
+                        <Link to="/signup">Sign Up</Link>
+                    </li>
                 </ul>
             </nav>
         </header>

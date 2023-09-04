@@ -14,7 +14,7 @@ export default function CreateQuery() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:9007/create-query', {
+            const response = await axios.post('http://localhost:9007/queries', {
                 qcase,
                 body,
                 name,
@@ -25,7 +25,7 @@ export default function CreateQuery() {
                 navigate("/posts")
             }
         } catch (error) {
-            setErrorMessage('Error creating query.');
+            setErrorMessage('Error creating query.' + error.message);
         }
     };
 
