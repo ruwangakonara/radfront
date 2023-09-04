@@ -48,7 +48,7 @@ export default function Signup() {
                     Password:
                     <input type="password" value={password} onChange={(event) => {
                         Setpassword(event.target.value);
-                        if (password !== passwordConfirm) {
+                        if (event.target.value !== passwordConfirm && passwordConfirm!=="") {
                             setError("Passwords don't match");
                         } else {
                             setError("");
@@ -58,8 +58,9 @@ export default function Signup() {
                 <label>
                     Password Confirm:
                     <input type="password" value={passwordConfirm} onChange={(event) => {
+                        // console.log(password,pass)
                         setPasswordConfirm(event.target.value);
-                        if (password !== passwordConfirm) {
+                        if (password !== event.target.value) {
                             setError("Passwords don't match");
                         } else {
                             setError("");
