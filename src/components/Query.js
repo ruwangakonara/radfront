@@ -17,26 +17,25 @@ function Query({ queryID }) {
   });
 
   useEffect(() => {
-    fetchQuery(queryID);
-  },[queryID]);
+    fetchQuery(queryID)
+  },[queryID])
 
   const fetchQuery = async () => {
     try {
-      const response = await axiosInstance.get(`/queries/${queryID}`);
-      setQuery(response.data.query);
-      setUpdatedQuery(response.data.query);
+      const response = await axiosInstance.get(`/queries/${queryID}`)
+      setQuery(response.data.query)
     } catch (error) {
-      console.error('Error fetching query:', error);
+      console.error('Error fetching query:', error)
     }
   };
 
   const updateQuery = async () => {
     try {
-      await axiosInstance.put(`/queries/${queryID}`, updatedQuery);
-      setQuery({ ...query, ...updatedQuery });
+      await axiosInstance.put(`/queries/${queryID}`, updatedQuery)
+      setQuery({ ...query, ...updatedQuery })
       setShowUpdateForm(false);
     } catch (error) {
-      console.error('Error updating query:', error);
+      console.error('Error updating query:', error)
     }
   };
 
@@ -67,6 +66,9 @@ function Query({ queryID }) {
           <div>QCase: {query.qcase}</div>
           <div>Name: {query.name}</div>
           <div>Email: {query.email}</div>
+          <div>AuthorID: {query.author}</div>
+          <div>Author: {query.authorname}</div>
+
           <button onClick={archiveQuery}>Archive</button>
           <hr />
 

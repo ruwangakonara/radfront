@@ -30,17 +30,17 @@ export default function Posts() {
     //     setSelectedPost(event.target.files[0]);
     // };
 
-    const handleUpload = async () => {
-        const formData = new FormData();
-        formData.append("image", selectedPost);
-        try {
-            await axios.post("http://localhost:9007/posts/upload", formData);
-            setSelectedPost(null);
-            fetchPosts();
-        } catch (err) {
-            console.error(err);
-        }
-    };
+    // const handleUpload = async () => {
+    //     const formData = new FormData();
+    //     formData.append("image", selectedPost);
+    //     try {
+    //         await axios.post("http://localhost:9007/posts/upload", formData);
+    //         setSelectedPost(null);
+    //         fetchPosts();
+    //     } catch (err) {
+    //         console.error(err);
+    //     }
+    // };
 
     return (
         <div>

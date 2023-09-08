@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 export default function Signup() {
     const [email, setEmail] = useState("");
     const [password, Setpassword] = useState("");
+    const [username, setUsername] = useState("")
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [error, setError] = useState("");
 
@@ -21,6 +22,7 @@ export default function Signup() {
             const response = await axiosInstance.post('/signup', {
                 email,
                 password,
+                username
             });
 
             if (response.status === 200) {
@@ -42,6 +44,10 @@ export default function Signup() {
                 <label>
                     Email:
                     <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
+                </label>
+                <label>
+                    Username:
+                    <input type="text" value={username} onChange={(event) => setUsername(event.target.value)} />
                 </label>
                 <br />
                 <label>
@@ -67,7 +73,7 @@ export default function Signup() {
                     }} />
                 </label>
                 <br />
-                <button type="submit" disabled={!(password === passwordConfirm) || password === "" || email === ""}>Sign Up</button>
+                <button type="submit" disabled={!(password === passwordConfirm) || password.trim() === "" || email.trim() === ""|| username.trim() === ""}>Sign Up</button>
             </form>
             {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>

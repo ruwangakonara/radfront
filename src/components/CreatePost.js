@@ -50,26 +50,10 @@ export default function CreatePost() {
         <div>
             <h2>Create a New Post</h2>
             <form onSubmit={handleSubmit}>
-                <label>
-                    Course Name:
-                    <input type="text" value={coursename} onChange={(event) => setCoursename(event.target.value)} />
-                </label>
-                <br />
-                <label>
-                    Unit Name:
-                    <input type="text" value={unitname} onChange={(event) => setUnitname(event.target.value)} />
-                </label>
-                <br />
-                <label>
-                    Description:
-                    <textarea value={description} onChange={(event) => setDescription(event.target.value)} />
-                </label>
-                <br />
-                <label>
-                    Image:
-                    <input type="file" accept="image/*" onChange={handleImageChange} required />
-                </label>
-                <br />
+                <label>Course Name:<input type="text" value={coursename} onChange={(event) => setCoursename(event.target.value)} /></label><br />
+                <label>Unit Name:<input type="text" value={unitname} onChange={(event) => setUnitname(event.target.value)} /></label><br/>
+                <label>Description:<textarea value={description} onChange={(event) => setDescription(event.target.value)} /></label><br/>
+                <label>Image:<input type="file" accept="image/*" onChange={handleImageChange} required /></label><br/>
                 <button type="submit" disabled={!isFormValid}>Create Post</button>
             </form>
         </div>

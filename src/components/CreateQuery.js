@@ -2,6 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:9007',
+    withCredentials: true, 
+});
+
 export default function CreateQuery() {
     const [qcase, setQCase] = useState('');
     const [body, setBody] = useState('');
@@ -9,20 +14,20 @@ export default function CreateQuery() {
     const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:9007/queries', {
+            const response = await axiosInstance.post('/queries', {
                 qcase,
                 body,
                 name,
-                email
+                email,
             });
 
             if (response.status === 200) {
-                navigate("/posts")
+                navigate('/posts');
             }
         } catch (error) {
             setErrorMessage('Error creating query.' + error.message);
@@ -31,7 +36,8 @@ export default function CreateQuery() {
 
     return (
         <div>
-            <h2>Create Query</h2><br/>
+            <h2>Create Query</h2>
+            <br />
             {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
             <form onSubmit={handleSubmit}>
                 <label>

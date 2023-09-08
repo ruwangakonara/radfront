@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom';
 
 function QueryList() {
   const [queries, setQueries] = useState([]);

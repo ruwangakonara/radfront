@@ -10,13 +10,34 @@ const axiosInstance = axios.create({
 export default function Announcements() {
   const [announcements, setAnnouncements] = useState(null);
   const [editingAnnouncementId, setEditingAnnouncementId] = useState(null);
-  const [editedTitle, setEditedTitle] = useState('');
-  const [editedBody, setEditedBody] = useState('');
+//   const [editedTitle, setEditedTitle] = useState('');
+//   const [editedBody, setEditedBody] = useState('');
+  const [updatedAnnouncement, setUpdatedAnnouncement] = useState({
+    body: '',
+    title: '',
+  });
   const [newAnnTitle, setNewAnnTitle] = useState('');
   const [newAnnBody, setNewAnnBody] = useState('');
+  const [auth, setAuth] = useState(false)
+    const [admin, setAdmin] = useState(false)
+
+    const checkauth = async () => {
+        try{
+            const response = await axiosInstance.get("/check-auth")
+            if (response.status === 206){
+                setAdmin(true)
+                setAuth(true)
+            } else if(response.status === 200){
+                setAuth(true)
+            }
+        } catch (err){
+            console.log(err.message)
+        }
+    }
 
   useEffect(() => {
       fetchAnnouncements();
+      checkauth()
   }, []);
 
   const navigate = useNavigate()
@@ -66,22 +87,35 @@ export default function Announcements() {
 
   const handleEdit = (announcement) => {
       setEditingAnnouncementId(announcement._id);
-      setEditedTitle(announcement.title);
-      setEditedBody(announcement.body);
+//       setEditedTitle(announcement.title);
+//       setEditedBody(announcement.body);
+        setUpdatedAnnouncement({
+            title: announcement.title,
+            body:announcement.body
+        })
+
+  };
+
+  
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUpdatedAnnouncement({
+      ...updatedAnnouncement,
+      [name]: value,
+    });
   };
 
   const handleUpdate = async (announcementId) => {
       try {
-          const response = await axiosInstance.put(`/announcements/${announcementId}`, {
-              title: editedTitle,
-              body: editedBody,
-          });
+          const response = await axiosInstance.put(`/announcements/${announcementId}`, updatedAnnouncement);
 
           if(response.status === 200){
             
             setEditingAnnouncementId(null);
-            setEditedTitle('');
-            setEditedBody('');
+            setUpdatedAnnouncement({
+                title: "",
+                body: ""
+            })
 
             fetchAnnouncements();
           } else if(response.status === 203){
@@ -96,32 +130,35 @@ export default function Announcements() {
   return (
       <div>
           <h1>Announcements</h1>
-          <div>
-              <h2>Create Announcement</h2>
-              <div>
-                  <label>Title:</label>
-                  <input
-                      type="text"
-                      value={newAnnTitle}
-                      onChange={(e) => setNewAnnTitle(e.target.value)}
-                  />
-              </div>
-              <div>
-                  <label>Body:</label>
-                  <textarea
-                      value={newAnnBody}
-                      onChange={(e) => setNewAnnBody(e.target.value)}
-                  />
-              </div>
-              <button onClick={handleCreate}>Create</button>
-          </div>
+          {(admin === true) && (
+                <div>
+                <h2>Create Announcement</h2>
+                <div>
+                    <label>Title:</label>
+                    <input
+                        type="text"
+                        value={newAnnTitle}
+                        onChange={(event) => setNewAnnTitle(event.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Body:</label>
+                    <textarea
+                        value={newAnnBody}
+                        onChange={(event) => setNewAnnBody(event.target.value)}
+                    />
+                </div>
+                <button onClick={handleCreate}>Create</button>
+            </div>
+          )}
+          
           {announcements &&
               announcements.map((announcement) => {
                   return (
                       <div key={announcement._id}>
-                          <h3>{editingAnnouncementId === announcement._id ? (<div><label>Title:</label> <input type="text" value={editedTitle} onChange={(e) => setEditedTitle(e.target.value)}/> </div>) : (announcement.title)}</h3>
+                          <h3><label>Title:</label>{editingAnnouncementId === announcement._id ? (<div> <input name = "title" type="text" value={updatedAnnouncement.title} onChange={(event) => handleInputChange(event)}/> </div>) : (announcement.title)}</h3>
                           <br />
-                          <h4>{editingAnnouncementId === announcement._id ? (<div><label>Body:</label> <textarea value={editedBody} onChange={(e) => setEditedBody(e.target.value)}/></div>) : (announcement.body)}</h4>
+                          <h4><label>Body:</label> {editingAnnouncementId === announcement._id ? (<div><textarea name = "body" value={updatedAnnouncement.body} onChange={(event) => handleInputChange(event)}/></div>) : (announcement.body)}</h4>
                           <br />
                           <p>Posted: {new Date(announcement.createdAt).toLocaleString()}</p>
                           {editingAnnouncementId === announcement._id ? (
@@ -129,12 +166,12 @@ export default function Announcements() {
                                   <button onClick={() => handleUpdate(announcement._id)}>Save</button>
                                   <button onClick={() => setEditingAnnouncementId(null)}>Cancel</button>
                               </div>
-                          ) : (
+                          ) : admin === true ? (
                               <div>
                                   <button onClick={() => handleEdit(announcement)}>Edit</button>
                                   <button onClick={() => handleDelete(announcement._id)}> Delete</button>
                               </div>
-                          )}
+                          ) : (<div></div>)}
                           <br />
                       </div>
                   );
