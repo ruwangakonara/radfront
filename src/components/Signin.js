@@ -36,22 +36,28 @@ export default function Signin() {
     };
 
     return (
-        <div>
-            <h2>Sign In</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Email:
-                    <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-                </label>
-                <br />
-                <label>
-                    Password:
-                    <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-                </label>
-                <br />
-                <button type="submit">Sign In</button>
-            </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="container">
+            <div className="row justify-content-center">
+                <div className="col-md-6">
+                    <div className="card">
+                        <div className="card-body">
+                            <h2 className="card-title">Sign In</h2>
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group">
+                                    <label>Email:</label>
+                                    <input type="email" className="form-control" value={email} onChange={(event) => setEmail(event.target.value)}/>
+                                </div>
+                                <div className="form-group">
+                                    <label>Password:</label>
+                                    <input type="password" className="form-control" value={password} onChange={(event) => setPassword(event.target.value)}/>
+                                </div>
+                                <button type="submit" className="btn btn-primary">Sign In</button>
+                            </form>
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function QueryList() {
   const [queries, setQueries] = useState([]);
   const axiosInstance = axios.create({
@@ -30,15 +32,17 @@ function QueryList() {
   };
 
   return (
-    <div>
+    <div className="container">
       <h2>Queries</h2>
       {queries.map((query) => (
-        <div key={query._id}>
-          <h3>Query ID: {query._id}</h3>
-          <h3>Archived: {query.archived ? 'Yes' : 'No'}</h3>
-          <h3>QCase: {query.qcase}</h3>
-          <h3>Name: {query.name}</h3>
-          <Link to={`/queries/${query._id}`}><button>View Query</button></Link>
+        <div key={query._id} className="card mt-4">
+          <div className="card-body">
+            <h3 className="card-title">Query ID: {query._id}</h3>
+            <p className="card-text">Archived: {query.archived ? 'Yes' : 'No'}</p>
+            <h4 className="card-title">QCase: {query.qcase}</h4>
+            <h4 className="card-title">Name: {query.name}</h4>
+            <Link to={`/queries/${query._id}`} className="btn btn-secondary">View Query</Link>
+          </div>
         </div>
       ))}
     </div>
