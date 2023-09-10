@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from './Layout';
-import CreateQuery from './CreateQuery';
+import Layout from '../layout/Layout';
+import CreateQuery from '../core/CreateQuery';
 
 export default function CreateQueryPage() {
 

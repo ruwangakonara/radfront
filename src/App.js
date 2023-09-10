@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import CreatePostPage from './components/CreatePostPage';
-import PostPage from './components/PostPage';
-import SignupPage from './components/SignupPage';
-import PostsPage from './components/PostsPage';
-import AnnouncementsPage from './components/AnnouncementsPage';
-import SigninPage from './components/SigninPage';
-import CreateQueryPage from './components/CreateQueryPage';
-import QueriesPage from './components/QueriesPage';
-import QueryPage from './components/QueryPage';
+import CreatePostPage from './components/pages/CreatePostPage';
+import PostPage from './components/pages/PostPage';
+import SignupPage from './components/pages/SignupPage';
+import PostsPage from './components/pages/PostsPage';
+import AnnouncementsPage from './components/pages/AnnouncementsPage';
+import SigninPage from './components/pages/SigninPage';
+import CreateQueryPage from './components/pages/CreateQueryPage';
+import QueriesPage from './components/pages/QueriesPage';
+import QueryPage from './components/pages/QueryPage';
 
 function App() {
     return (

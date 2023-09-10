@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Announcements from './components/Announcements';
-// import './index.css';
 import App from './App';
-// import Images from './components/Posts';
-// import reportWebVitals from './reportWebVitals';
-// import Signup from './components/Signup';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

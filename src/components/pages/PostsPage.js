@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from './Layout';
-import Posts from './Posts';
+import Layout from '../layout/Layout';
+import Posts from '../core/Posts';
 
 export default function PostsPage() {
 

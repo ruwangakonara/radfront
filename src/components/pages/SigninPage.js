@@ -1,12 +1,12 @@
 import React from 'react';
-import Layout from './Layout';
-import Signup from './Signup';
+import Layout from '../layout/Layout';
+import Signin from '../core/Signin';
 
 export default function SigninPage() {
 
     return (
         <Layout>
-            <Signup />
+            <Signin />
         </Layout>
     );
 }

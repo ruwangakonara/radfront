@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from './Layout';
-import Announcements from './Announcements';
+import Layout from '../layout/Layout';
+import Announcements from '../core/Announcements';
 
 export default function Announcementspage() {
 

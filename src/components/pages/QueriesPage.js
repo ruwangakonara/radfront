@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from './Layout';
-import Queries from './Queries';
+import Layout from '../layout/Layout';
+import Queries from '../core/Queries';
 
 export default function QueriesPage() {
 

@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function QueryList() {
+function Queries() {
   const [queries, setQueries] = useState([]);
   const axiosInstance = axios.create({
     baseURL: 'http://localhost:9007',
@@ -49,4 +49,4 @@ function QueryList() {
   );
 }
 
-export default QueryList;
+export default Queries;

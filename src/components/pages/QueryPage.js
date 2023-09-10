@@ -1,6 +1,6 @@
 import React from 'react';
-import Layout from './Layout';
-import Query from './Query';
+import Layout from '../layout/Layout';
+import Query from '../core/Query';
 import { useParams } from 'react-router-dom';
 
 export default function QueryPage() {

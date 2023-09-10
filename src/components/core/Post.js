@@ -124,6 +124,7 @@ export default function Post({ postId }) {
   };
 
   const handleDeletePost = async () => {
+    console.log("hello")
     try {
       await axiosInstance.delete(`/commentsdel/${postId}`);
       await axiosInstance.delete(`/posts/${postId}`);
@@ -155,6 +156,8 @@ export default function Post({ postId }) {
     }
   };
 
+  const maxImageWidth = { maxWidth: '800px' };
+
   return (
     <div className="container">
       {update ? (
@@ -172,7 +175,7 @@ export default function Post({ postId }) {
           <h2><label>Course: </label>{post.coursename}</h2>
           <h3><label>Unit: </label>{post.unitname}</h3>
           <p>{post.description}</p>
-          <img height = "500px" width = "800px"src={`http://localhost:9007/uploadedpostimgs/${post.filename}`} alt={post.filename}/>
+          <img src={`http://localhost:9007/uploadedpostimgs/${post.filename}`} alt={post.filename} style={maxImageWidth}/>
           <p>Created: {new Date(post.createdAt).toLocaleString()}</p>
           <p> <label>By: </label>{post.authorname}</p>
 
